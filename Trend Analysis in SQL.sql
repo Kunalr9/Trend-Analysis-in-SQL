@@ -1,138 +1,104 @@
 --Query 1: Get the names of customers who have made more than 5 orders along with the names of the products they’ve ordered, sorted by the customer’s name.
 
-SELECT c.name AS customer_name, p.name AS product_name
-FROM Customers c
-JOIN Orders o 
-ON c.customer_id = o.customer_id
-JOIN Products p 
-ON o.product_id = p.product_id
-WHERE c.customer_id IN (
-  SELECT customer_id 
-  FROM Orders
-  GROUP BY customer_id
-  HAVING COUNT(order_id) > 5
-)
-ORDER BY c.name;
-
- 
+SELECT C.NAME AS CUSTOMER_NAME,
+	P.NAME AS PRODUCT_NAME
+FROM CUSTOMERS C
+JOIN ORDERS O ON C.CUSTOMER_ID = O.CUSTOMER_ID
+JOIN PRODUCTS P ON O.PRODUCT_ID = P.PRODUCT_ID
+WHERE C.CUSTOMER_ID IN
+		(SELECT CUSTOMER_ID
+			FROM ORDERS
+			GROUP BY CUSTOMER_ID
+			HAVING COUNT(ORDER_ID) > 5)
+ORDER BY C.NAME;
 
 --Query 2: Get the names of customers and products along with the order date for orders made after ‘2024-02-15’, sorted by order date
 
-SELECT c.name AS customer_name,p.name AS product_name, order_date
-FROM Orders o
-Join public.customers c
-ON o.customer_id=c.customer_id
-Join public.products p
-ON o.product_id=p.product_id
-WHERE order_date > '2024-02-15'
-Order by order_date;
-
+SELECT C.NAME AS CUSTOMER_NAME,
+	P.NAME AS PRODUCT_NAME,
+	ORDER_DATE
+FROM ORDERS O
+JOIN PUBLIC.CUSTOMERS C ON O.CUSTOMER_ID = C.CUSTOMER_ID
+JOIN PUBLIC.PRODUCTS P ON O.PRODUCT_ID = P.PRODUCT_ID
+WHERE ORDER_DATE > '2024-02-15'
+ORDER BY ORDER_DATE;
 
 --Query 3: Products Never Ordered
 
-SELECT p.product_id, p.name
-FROM public.Products p
-LEFT JOIN Orders o 
-ON p.product_id = o.product_id
-WHERE o.order_id IS NULL;
+SELECT P.PRODUCT_ID,
+	P.NAME
+FROM PUBLIC.PRODUCTS P
+LEFT JOIN ORDERS O ON P.PRODUCT_ID = O.PRODUCT_ID
+WHERE O.ORDER_ID IS NULL;
 
-
- 
 --Query 4: Get the total revenue generated from each product
 
-SELECT 
-    p.name AS product_name,
-    SUM(p.unit_price) AS total_revenue
-FROM 
-    Orders o
-JOIN 
-    Products p 
-ON o.product_id = p.product_id
-GROUP BY 
-    product_name;
-
+SELECT P.NAME AS PRODUCT_NAME,
+	SUM(P.UNIT_PRICE) AS TOTAL_REVENUE
+FROM ORDERS O
+JOIN PRODUCTS P ON O.PRODUCT_ID = P.PRODUCT_ID
+GROUP BY PRODUCT_NAME;
 
 --Query 5: Total Sales Per Product
 
-Select p.product_id, p.name, Sum(unit_price) AS Total_Sales
-From public.orders o
-Join public.products p
-ON o.product_id=p.product_id
-Group by p.product_id, p.name
-Order By p.product_id, p.name ASC;
+SELECT P.PRODUCT_ID,
+	P.NAME,
+	SUM(UNIT_PRICE) AS TOTAL_SALES
+FROM PUBLIC.ORDERS O
+JOIN PUBLIC.PRODUCTS P ON O.PRODUCT_ID = P.PRODUCT_ID
+GROUP BY P.PRODUCT_ID,
+	P.NAME
+ORDER BY P.PRODUCT_ID,
+	P.NAME ASC;
 
- 
 --Query 6: Get the total number of orders per location (CTE)
-
-WITH location_orders AS (
-  SELECT location_id, COUNT(order_id) as total_orders
-  FROM Orders
-  GROUP BY location_id
-)
-SELECT Location.name, location_orders.total_orders
-FROM Location
-JOIN location_orders 
-ON Location.location_id = location_orders.location_id;
-
+ WITH LOCATION_ORDERS AS
+	(SELECT LOCATION_ID,
+			COUNT(ORDER_ID) AS TOTAL_ORDERS
+		FROM ORDERS
+		GROUP BY LOCATION_ID)
+SELECT LOCATION.NAME,
+	LOCATION_ORDERS.TOTAL_ORDERS
+FROM LOCATION
+JOIN LOCATION_ORDERS ON LOCATION.LOCATION_ID = LOCATION_ORDERS.LOCATION_ID;
 
 --Query 7: Total Revenue Per Location
 
-SELECT l.name, SUM(p.unit_price) AS Total_Revenue
-FROM public.orders o
-Join public.location l
-ON o.location_id=l.location_id
-JOIN public.products p
-ON o.product_id=p.product_id
-GROUP BY l.name;
-
+SELECT L.NAME,
+	SUM(P.UNIT_PRICE) AS TOTAL_REVENUE
+FROM PUBLIC.ORDERS O
+JOIN PUBLIC.LOCATION L ON O.LOCATION_ID = L.LOCATION_ID
+JOIN PUBLIC.PRODUCTS P ON O.PRODUCT_ID = P.PRODUCT_ID
+GROUP BY L.NAME;
 
 --Query 8: Create a view that shows the total sales per customer
 
-Create View customer_sales AS
-SELECT 
-    c.name AS customer_name,
-    COUNT(o.order_id) AS total_orders,
-    SUM(p.unit_price) AS total_sales
-FROM 
-    customers c
-JOIN 
-    orders o ON c.customer_id = o.customer_id
-JOIN 
-    products p ON o.product_id = p.product_id
-GROUP BY 
-    c.name
-ORDER BY
-    c.name;
-
-
- 
+CREATE VIEW CUSTOMER_SALES AS
+SELECT C.NAME AS CUSTOMER_NAME,
+	COUNT(O.ORDER_ID) AS TOTAL_ORDERS,
+	SUM(P.UNIT_PRICE) AS TOTAL_SALES
+FROM CUSTOMERS C
+JOIN ORDERS O ON C.CUSTOMER_ID = O.CUSTOMER_ID
+JOIN PRODUCTS P ON O.PRODUCT_ID = P.PRODUCT_ID
+GROUP BY C.NAME
+ORDER BY C.NAME;
 
 --Query 9: Average Order Value
 
-SELECT AVG(unit_price) as avg_order_value
-FROM Orders o
-JOIN Products p 
-ON o.product_id = p.product_id;
-
+SELECT AVG(UNIT_PRICE) AS AVG_ORDER_VALUE
+FROM ORDERS O
+JOIN PRODUCTS P ON O.PRODUCT_ID = P.PRODUCT_ID;
 
 --Query 10: Create a view to get the details of all orders, including the customer name, product name, unit price, location name, and order date.
 
-Create View order_details AS 
-SELECT 
-    o.order_id,
-    c.name AS customer_name,
-    p.name AS product_name,
-    p.unit_price,
-    l.name AS location_name,
-    o.order_date
-FROM 
-    Orders o
-JOIN 
-    Customers c ON o.customer_id = c.customer_id
-JOIN 
-    Products p ON o.product_id = p.product_id
-JOIN 
-    Location l ON o.location_id = l.location_id;
-
-
-
+CREATE VIEW ORDER_DETAILS AS
+SELECT O.ORDER_ID,
+	C.NAME AS CUSTOMER_NAME,
+	P.NAME AS PRODUCT_NAME,
+	P.UNIT_PRICE,
+	L.NAME AS LOCATION_NAME,
+	O.ORDER_DATE
+FROM ORDERS O
+JOIN CUSTOMERS C ON O.CUSTOMER_ID = C.CUSTOMER_ID
+JOIN PRODUCTS P ON O.PRODUCT_ID = P.PRODUCT_ID
+JOIN LOCATION L ON O.LOCATION_ID = L.LOCATION_ID;
