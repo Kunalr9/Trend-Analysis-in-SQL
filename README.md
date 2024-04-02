@@ -22,6 +22,7 @@ Query 2: Get the names of customers and products along with the order date for o
 ![image](https://github.com/Kunalr9/Trend-Analysis-in-SQL/assets/165716845/e8d1176f-9623-4033-97b8-129517127f2c)
 
 Query 3: Products Never Ordered
+
 ![image](https://github.com/Kunalr9/Trend-Analysis-in-SQL/assets/165716845/fffcc8fd-e13e-474a-8d1a-292c510a119d)
 
 Query 4: Get the total revenue generated from each product
@@ -34,12 +35,14 @@ Query 6: Get the total number of orders per location (CTE)
 ![image](https://github.com/Kunalr9/Trend-Analysis-in-SQL/assets/165716845/ab9294f5-1b36-4544-8b29-88929a99a144)
 
 Query 7: Total Revenue Per Location
+
 ![image](https://github.com/Kunalr9/Trend-Analysis-in-SQL/assets/165716845/91907d85-f573-41e9-8f5b-7720ee953939)
 
 Query 8: Create a view that shows the total sales per customer
 ![image](https://github.com/Kunalr9/Trend-Analysis-in-SQL/assets/165716845/14c6facc-83a1-4fe7-8166-06c256db1aae)
 
 Query 9: Average Order Value
+
 ![image](https://github.com/Kunalr9/Trend-Analysis-in-SQL/assets/165716845/2a72b9d3-5349-40a2-8a26-23e2ce19af5f)
 
 Query 10: Create a view to get the details of all orders, including the customer name, product name, unit price, location name, and order date.
