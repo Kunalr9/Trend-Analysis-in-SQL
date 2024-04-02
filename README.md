@@ -1,5 +1,6 @@
 # Trend-Analysis-in-SQL
 I have created an e-commerce database. I will analyze this data and answer important questions that can help a business in a real-world scenario.
+
 **Goal of the project**
 **Understand Customer Behavior:** By analyzing the total number of orders per customer, the top customers by number of orders, and customers who have ordered more than 5 times, you aim to understand the purchasing habits of your customers. This can help in identifying loyal customers and understanding customer retention.
 **Analyze Product Performance:** By calculating the total sales per product, the most popular product, and identifying products that have never been ordered, you aim to understand which products are performing well and which are not. This can guide inventory management and marketing efforts.
