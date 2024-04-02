@@ -54,8 +54,3 @@ Query 10: Create a view to get the details of all orders, including the customer
 
 
 
-
-
-
-
-
